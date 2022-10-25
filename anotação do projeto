@@ -1,0 +1,66 @@
+// Adicionamos um map ao arquivo json
+
+pizzaJson.map( (item, index) => {
+    console.log(item)
+});
+
+// vamos clonar a estrutura do html, preenche os dados e joga na tela
+
+// para clonar utilizamos .cloneNode e o true significa que vamos pegar tudo que esta dentro dele.
+
+
+pizzaJson.map( (item, index) => {
+    let pizzaItem = document.querySelector('.models .pizza-item').cloneNode(true);
+    //preencher as informações em pizza-item
+
+    document.querySelector('main .pizza-area').append(pizzaItem);   // o append pega o conteúdo que ja tem em pizza-area e adiciona mais um conteudo
+                                                                    // o que esta entre parenteses, é o que queremos replicar
+}); 
+
+let modalQt = 1; // quantidade padrao de quando abrir o modal
+
+const c = (el) => document.querySelector(el) ;  // criei a função e adicionei o elemento que quero selecionar (el).
+                                                // essa função vai retornar o querySelector 
+
+
+// Adicionando os nomes/descrição/preço/imagem/Adicionando um model quando clickar em uma pizza/
+
+pizzaItem.setAttribute('data-key', index); // o prefixo data, geralmente usamos quando queremos adicionar um atributo de informação
+pizzaItem.querySelector('.pizza-item--name').innerHTML = item.name   // Esse item.name está no outro arquivo js(json)
+pizzaItem.querySelector('.pizza-item--desc').innerHTML = item.description; // Esse item.description está no outro arquivo js(json)
+pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`; // selecionei o elemento no HTML, usei um template string e usei o toFixed para mostrar 2 numeros após a virgula 
+pizzaItem.querySelector('.pizza-item--img img').src = item.img;  //Selecionei o elemento e quero trocar o src e dps seleciono o item.img
+c('.pizzaInfo--pricearea .pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`; // Adicionando preço
+c('.pizzaInfo--size.selected').classList.remove('selected'); // Vai abrir o menu com os itens deselecionado
+cs('.pizzaInfo--size').forEach((size, sizeIndex)=>{ // forEach = para cada um dos itens
+    if(sizeIndex == 2) {
+        size.classList.add('selected');  // se o array dos itens, for igual a 2 ele seleciona
+    }
+    size.querySelector('span').innerHTML = '123'; // o tamanho sera exibido
+});
+
+c('.pizzaInfo--qt').innerHTML = modalQt; // sempre que abrir o modal vir com o padrao exibido
+
+
+pizzaItem.querySelector('a').addEventListener('click', (e)=> { // Selecionei o elemento de link. Adicionei um escutador de evento. Adicionei o primeiro parametro de "click" e depois a função que eu quero executar, quando o usuario clickar(e). Depois vou bloquear a ação natural do click no item a, para quando eu clique ele não atualize a tela "e.preventDefault"
+    e.preventDefault();
+
+    let key = e.target.closest('.pizza-item').getAttribute('data-key'); // a função closest vai procurar o elemento mais proximo que tenha "pizza-item" e depois pegar o atributo "getAttribute" 
+
+    c('.pizzaInfo h1').innerHTML = pizzaJson[key].name ; // Adicionar nome quando abrimos o model.
+    c('pizzaInfo--desc').innerHTML = pizzaJson[key].description; // Adicionar descrição no nosso model
+    c('.pizzaWindowArea .pizzaWindowBody img').src = pizzaJson[key].img; // adicionando imagem ao model
+
+    c('.pizzaWindowArea').style.opacity = 0; // Mudei a opacidade do meu elemento para 0
+    c('.pizzaWindowArea').style.display = 'flex'; // Selecionei o elemento do model, alterei o style dele para flex. Ele só aparecera quando clickarmos em alguma pizza.
+
+    setTimeout(()=>{      // Adicionei um setTimeout que vai dar um delay a nossa função
+        c('.pizzaWindowArea').style.opacity = 1; // selecionei oq ele vai fazer com o meu elemento
+    },200) // setei um delay de 200milisegundos
+
+});
+
+
+function cancelar() {  // adicionei a função cancelar nos dois botões no html, no do mobile/pc
+    c('.pizzaWindowArea').style.display = 'none';
+}
